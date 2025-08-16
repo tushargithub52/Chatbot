@@ -2,10 +2,13 @@ require('dotenv').config();
 const app = require('./src/app');
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { generateResponse } = require('./src/service/ai.service')
+const { generateResponse } = require('./src/service/ai.service');
+const { text } = require('stream/consumers');
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
+
+const chatHistory = [];
 
 io.on("connection", (socket) => {
     console.log("A user connected");
@@ -17,9 +20,23 @@ io.on("connection", (socket) => {
     socket.on("user-prompt", async (data) => {
 
         console.log("Received user prompt:", data.prompt);
+
+        // Store the prompt in chat history
+        chatHistory.push({
+            role: "user",
+            parts: [ { text: data.prompt }]
+        });
+
         try {
-            const response = await generateResponse(data.prompt);
+            const response = await generateResponse(chatHistory);
             console.log("Generated response:", response);
+            
+            // Store the response in chat history
+            chatHistory.push({
+                role: "model",
+                parts: [ { text: response }]
+            });
+            
             socket.emit("bot-response", { response });
         } catch (error) {
             console.error("Error generating response:", error);
