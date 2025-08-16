@@ -19,12 +19,12 @@ io.on("connection", (socket) => {
 
     socket.on("user-prompt", async (data) => {
 
-        console.log("Received user prompt:", data.prompt);
+        console.log("Received user prompt:", data);
 
         // Store the prompt in chat history
         chatHistory.push({
             role: "user",
-            parts: [ { text: data.prompt }]
+            parts: [ { text: data }]
         });
 
         try {
@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
                 parts: [ { text: response }]
             });
             
-            socket.emit("bot-response", { response });
+            socket.emit("bot-response", response);
         } catch (error) {
             console.error("Error generating response:", error);
             socket.emit("bot-response", { response: "Sorry, I couldn't process your request." });
