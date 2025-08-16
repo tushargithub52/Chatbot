@@ -6,7 +6,11 @@ const { generateResponse } = require('./src/service/ai.service');
 const { text } = require('stream/consumers');
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, { /* options */ });
+const io = new Server(httpServer, { 
+    cors: {
+        origin: "http://localhost:5173",  
+    }
+ });
 
 const chatHistory = [];
 
