@@ -36,7 +36,7 @@ function App() {
   }
 
   useEffect(() => {
-    let socketInstance = io("http://localhost:3000"); 
+    let socketInstance = io("https://chatbot-vpmg.onrender.com"); 
     setSocket(socketInstance)
 
     socketInstance.on('bot-response', (response) => {
