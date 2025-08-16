@@ -8,7 +8,7 @@ const { text } = require('stream/consumers');
 const httpServer = createServer(app);
 const io = new Server(httpServer, { 
     cors: {
-        origin: "https://ai-chatbot-fxqk.onrender.com",  
+        origin: "https://ai-chatbot-phi-eosin.vercel.app/",  
     }
  });
 
